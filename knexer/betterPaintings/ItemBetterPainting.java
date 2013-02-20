@@ -15,6 +15,7 @@ public class ItemBetterPainting extends Item {
 		// TODO Auto-generated constructor stub
 		this.setCreativeTab(CreativeTabs.tabDecorations);
 		this.setIconCoord(10, 1);
+		this.setItemName("itemBetterPainting");
 	}
 
 	public boolean onItemUse(ItemStack par1ItemStack,

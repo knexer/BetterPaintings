@@ -1,6 +1,8 @@
 package knexer.betterPaintings;
 
+import knexer.betterPaintings.common.ModBetterPaintings;
 import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -24,4 +26,9 @@ public class EntityBetterPainting extends EntityPainting {
 		super(par1World, par2, par3, par4, par5, par6Str);
 	}
 
+	@Override
+	public void dropItemStack()
+	{
+		this.entityDropItem(new ItemStack(ModBetterPaintings.paintingItem), 0.0F);
+	}
 }
