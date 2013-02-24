@@ -46,7 +46,12 @@ public class ModBetterPaintings {
 	public void init(FMLInitializationEvent event) {
 		proxy.registerRenderers();
 		LanguageRegistry.addName(paintingItem, "Fucking Awesome Painting Item");
-		GameRegistry.addShapelessRecipe(new ItemStack(paintingItem, 1, PaintingMetadataUtil.getDamageForSize(1, 1)), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(painting(1, 1, 4), new ItemStack(Item.painting), new ItemStack(Item.slimeBall));
+		
+		GameRegistry.addRecipe(painting(2, 1), "##", '#', painting(1, 1));
+		GameRegistry.addRecipe(painting(1, 2), "#", "#", '#', painting(1, 1));
+		GameRegistry.addRecipe(painting(2, 2), "##", '#', painting(1, 2));
+		GameRegistry.addRecipe(painting(2, 2), "#", "#", '#', painting(2, 1));
 		
 		for (int i = 0; i < 16; i++) {
 			LanguageRegistry.addName(new ItemStack(paintingItem, 1, i), "painting " + PaintingMetadataUtil.getNameSuffix(i));
@@ -56,5 +61,26 @@ public class ModBetterPaintings {
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
 		// Stub Method
+	}
+	
+	/**
+	 * Get a stack of <code>width</code>-by-<code>height</code> better paintings
+	 * @param width
+	 * @param height
+	 * @param size The number of paintings in the stack
+	 * @return
+	 */
+	private ItemStack painting(int width, int height, int size) {
+		return new ItemStack(paintingItem, size, PaintingMetadataUtil.getDamageForSize(width, height));
+	}
+	
+	/**
+	 * Get a stack of <code>width</code>-by-<code>height</code> better paintings
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	private ItemStack painting(int width, int height) {
+		return painting(width, height, 1);
 	}
 }
