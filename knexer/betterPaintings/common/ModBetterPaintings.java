@@ -1,6 +1,7 @@
 package knexer.betterPaintings.common;
 
 import knexer.betterPaintings.ItemBetterPainting;
+import knexer.betterPaintings.PaintingMetadataUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,11 @@ public class ModBetterPaintings {
 	public void init(FMLInitializationEvent event) {
 		proxy.registerRenderers();
 		LanguageRegistry.addName(paintingItem, "Fucking Awesome Painting Item");
-		GameRegistry.addShapelessRecipe(new ItemStack(paintingItem), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(paintingItem, 1, PaintingMetadataUtil.getDamageForSize(1, 1)), new ItemStack(Block.dirt));
+		
+		for (int i = 0; i < 16; i++) {
+			LanguageRegistry.addName(new ItemStack(paintingItem, 1, i), "painting " + PaintingMetadataUtil.getNameSuffix(i));
+		}
 	}
 
 	@PostInit
