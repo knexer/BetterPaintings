@@ -15,7 +15,7 @@ public class PaintingMetadataUtil {
 	}
 	
 	public static String getNameSuffix(int width, int height) {
-		return "(" + width + "x" + height + ")";
+		return "(Width: " + width + ", Height: " + height + ")";
 	}
 	
 	public static String getNameSuffix(int damage) {
