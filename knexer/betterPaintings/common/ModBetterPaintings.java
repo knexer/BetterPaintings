@@ -1,5 +1,11 @@
 package knexer.betterPaintings.common;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import knexer.ItemStackWrapper;
 import knexer.betterPaintings.ItemBetterPainting;
 import knexer.betterPaintings.PaintingMetadataUtil;
 import net.minecraft.block.Block;
@@ -63,6 +69,123 @@ public class ModBetterPaintings {
 		// Stub Method
 	}
 	
+	/**
+	 * Generates and adds every recipe for paintings larger than 1x1.
+	 * 
+	 * @param atomicPainting
+	 * The 1x1 painting item.
+	 * @param maxX
+	 * The largest possible painting width.
+	 * @param maxY
+	 * The largest possible painting height.
+	 */
+	private void addPaintingCompositionRecipes(ItemStack atomicPainting, int maxX, int maxY)
+	{
+		ItemStackWrapper wrappedAtomicPainting = new ItemStackWrapper(atomicPainting);
+		//The list of all paintings.  Not updated during the inner loop.
+		List<ItemStackWrapper> allPaintings = new ArrayList<ItemStackWrapper>();
+		allPaintings.add(wrappedAtomicPainting);
+		
+		//The paintings that have not yet been a 'left' painting.  Note that left- and right-ness has
+		//nothing whatsoever to do with geometry.
+		Queue<ItemStackWrapper> leftPaintings = new LinkedList<ItemStackWrapper>();
+		leftPaintings.offer(wrappedAtomicPainting);
+		
+		//this queue will grow over time; this for loop will hit every painting exactly once.
+		while(!leftPaintings.isEmpty())
+		{
+			ItemStackWrapper leftPainting = leftPaintings.poll();
+			
+			//compute 'left' painting's dimensions
+			int leftDamage = leftPainting.getWrappedItemStack().getItemDamage();
+			int leftX = PaintingMetadataUtil.getWidth(leftDamage);
+			int leftY = PaintingMetadataUtil.getHeight(leftDamage);
+			
+			//the paintings newly generated this time around.
+			List<ItemStackWrapper> newPaintings = new ArrayList<ItemStackWrapper>();
+			for(ItemStackWrapper rightPainting : allPaintings)
+			{
+				//compute 'right' painting's dimensions
+				int rightDamage = leftPainting.getWrappedItemStack().getItemDamage();
+				int rightX = PaintingMetadataUtil.getWidth(rightDamage);
+				int rightY = PaintingMetadataUtil.getHeight(rightDamage);
+				
+				//if the paintings are compatible on the horizontal axis
+				if(leftX == rightX && leftY + rightY <= maxY)
+				{
+					//add the recipes to the game, return the products (there might be new paintings)
+					newPaintings.add(addHorizontalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
+				}
+				
+				//if the paintings are compatible on the vertical axis
+				if(leftY == rightY && leftX + rightX <= maxX)
+				{
+					//add the recipes to the game, return the products (there might be new paintings)
+					newPaintings.add(addVerticalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
+				}
+			}
+			
+			//figure out which paintings are actually new
+			newPaintings.removeAll(allPaintings);
+			
+			//add those to the list of all paintings and to the queue of paintings to inspect
+			allPaintings.addAll(newPaintings);
+			leftPaintings.addAll(newPaintings);
+		}
+	}
+	
+	/**
+	 * Adds both recipes that combine the given paintings in the y direction.
+	 * The x dimensions of the paintings are assumed to be equal.
+	 * @param leftPainting
+	 * @param rightPainting
+	 * @param leftX
+	 * @param rightX
+	 * @param leftY
+	 * @param rightY
+	 * @return
+	 */
+	private ItemStackWrapper addVerticalRecipes(ItemStackWrapper leftPainting,
+			ItemStackWrapper rightPainting, int leftX, int rightX, int leftY,
+			int rightY) {
+		//The painting that will be produced by both of these recipes
+		ItemStack product = painting(leftX, leftY + rightY);
+		
+		//left on the top first
+		GameRegistry.addRecipe(product, "#", "!", '#', leftPainting.getWrappedItemStack(), '!', rightPainting.getWrappedItemStack());
+
+		//then left on the bottom!
+		GameRegistry.addRecipe(product, "!", "#", '#', leftPainting.getWrappedItemStack(), '!', rightPainting.getWrappedItemStack());
+		
+		return new ItemStackWrapper(product);
+	}
+
+	/**
+	 * Adds both recipes that combine the given paintings in the x direction.
+	 * The y dimensions of the paintings are assumed to be equal.
+	 * @param leftPainting
+	 * @param rightPainting
+	 * @param leftX
+	 * @param rightX
+	 * @param leftY
+	 * @param rightY
+	 * @return
+	 */
+	private ItemStackWrapper addHorizontalRecipes(
+			ItemStackWrapper leftPainting, ItemStackWrapper rightPainting,
+			int leftX, int rightX, int leftY, int rightY) {
+		//The painting that will be produced by both of these recipes
+		ItemStack product = painting(leftX + rightX, leftY);
+		
+		//left on the left first
+		GameRegistry.addRecipe(product, "#!", '#', leftPainting.getWrappedItemStack(), '!', rightPainting.getWrappedItemStack());
+
+		//then left on the right!
+		GameRegistry.addRecipe(product, "!#", '#', leftPainting.getWrappedItemStack(), '!', rightPainting.getWrappedItemStack());
+		
+		return new ItemStackWrapper(product);
+	}
+
 	/**
 	 * Get a stack of <code>width</code>-by-<code>height</code> better paintings
 	 * @param width
