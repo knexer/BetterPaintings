@@ -54,10 +54,7 @@ public class ModBetterPaintings {
 		LanguageRegistry.addName(paintingItem, "Fucking Awesome Painting Item");
 		GameRegistry.addShapelessRecipe(painting(1, 1, 4), new ItemStack(Item.painting), new ItemStack(Item.slimeBall));
 		
-		GameRegistry.addRecipe(painting(2, 1), "##", '#', painting(1, 1));
-		GameRegistry.addRecipe(painting(1, 2), "#", "#", '#', painting(1, 1));
-		GameRegistry.addRecipe(painting(2, 2), "##", '#', painting(1, 2));
-		GameRegistry.addRecipe(painting(2, 2), "#", "#", '#', painting(2, 1));
+		addPaintingCompositionRecipes(painting(1, 1, 1), 4, 4);
 		
 		for (int i = 0; i < 16; i++) {
 			LanguageRegistry.addName(new ItemStack(paintingItem, 1, i), "painting " + PaintingMetadataUtil.getNameSuffix(i));
