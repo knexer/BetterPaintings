@@ -1,5 +1,6 @@
 package knexer.betterPaintings.common;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,9 +9,9 @@ import java.util.Queue;
 import knexer.ItemStackWrapper;
 import knexer.betterPaintings.ItemBetterPainting;
 import knexer.betterPaintings.PaintingMetadataUtil;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -28,7 +29,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModBetterPaintings {
 
-	public static final ItemBetterPainting paintingItem = new ItemBetterPainting(9001);
+	public static ItemBetterPainting paintingItem;
 	public static final int MAX_WIDTH = 4;
 	public static final int MAX_HEIGHT = 4;
 	
@@ -47,7 +48,13 @@ public class ModBetterPaintings {
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-		// Stub Method
+		File f = event.getSuggestedConfigurationFile();
+		Configuration config = new Configuration(f);
+		config.load();
+		int id = config.getItem("betterPainting", 9001).getInt();
+		config.save();
+		
+		paintingItem = new ItemBetterPainting(id);
 	}
 
 	@Init
