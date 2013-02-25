@@ -29,6 +29,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class ModBetterPaintings {
 
 	public static final ItemBetterPainting paintingItem = new ItemBetterPainting(9001);
+	public static final int MAX_WIDTH = 4;
+	public static final int MAX_HEIGHT = 4;
 	
 	static
 	{
@@ -54,10 +56,13 @@ public class ModBetterPaintings {
 		LanguageRegistry.addName(paintingItem, "Fucking Awesome Painting Item");
 		GameRegistry.addShapelessRecipe(painting(1, 1, 4), new ItemStack(Item.painting), new ItemStack(Item.slimeBall));
 		
-		addPaintingCompositionRecipes(painting(1, 1, 1), 4, 4);
+		addPaintingCompositionRecipes(painting(1, 1, 1), MAX_WIDTH, MAX_HEIGHT);
 		
-		for (int i = 0; i < 16; i++) {
-			LanguageRegistry.addName(new ItemStack(paintingItem, 1, i), "painting " + PaintingMetadataUtil.getNameSuffix(i));
+		for (int width = 1; width <= MAX_WIDTH; width++) {
+			for (int height = 1; height <= MAX_HEIGHT; height++) {
+				LanguageRegistry.addName(painting(width, height), "Painting " + PaintingMetadataUtil.getNameSuffix(width, height));
+				GameRegistry.addShapelessRecipe(painting(1, 1, width * height), painting(width, height));
+			}
 		}
 	}
 
