@@ -110,18 +110,18 @@ public class ModBetterPaintings {
 				int rightX = PaintingMetadataUtil.getWidth(rightDamage);
 				int rightY = PaintingMetadataUtil.getHeight(rightDamage);
 				
-				//if the paintings are compatible on the horizontal axis
+				//if the paintings are compatible on the vertical axis
 				if(leftX == rightX && leftY + rightY <= maxY)
 				{
 					//add the recipes to the game, return the products (there might be new paintings)
-					newPaintings.add(addHorizontalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
+					newPaintings.add(addVerticalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
 				}
 				
-				//if the paintings are compatible on the vertical axis
+				//if the paintings are compatible on the horizontal axis
 				if(leftY == rightY && leftX + rightX <= maxX)
 				{
 					//add the recipes to the game, return the products (there might be new paintings)
-					newPaintings.add(addVerticalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
+					newPaintings.add(addHorizontalRecipes(leftPainting, rightPainting, leftX, rightX, leftY, rightY));
 				}
 			}
 			
