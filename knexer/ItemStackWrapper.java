@@ -25,7 +25,7 @@ public class ItemStackWrapper {
 	{
 		if(other == null) return false;
 		if(!(other instanceof ItemStackWrapper)) return false;
-		ItemStack o = (ItemStack)other;
+		ItemStack o = ((ItemStackWrapper) other).getWrappedItemStack();
 		
 		if(wrapped.itemID != o.itemID) return false;
 		if(wrapped.stackSize != o.stackSize) return false;

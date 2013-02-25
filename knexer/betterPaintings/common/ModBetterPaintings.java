@@ -103,7 +103,7 @@ public class ModBetterPaintings {
 			for(ItemStackWrapper rightPainting : allPaintings)
 			{
 				//compute 'right' painting's dimensions
-				int rightDamage = leftPainting.getWrappedItemStack().getItemDamage();
+				int rightDamage = rightPainting.getWrappedItemStack().getItemDamage();
 				int rightX = PaintingMetadataUtil.getWidth(rightDamage);
 				int rightY = PaintingMetadataUtil.getHeight(rightDamage);
 				
